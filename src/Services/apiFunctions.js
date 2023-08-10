@@ -41,7 +41,7 @@ export const putApiData = (url, taskId, data) => {
 // function to delete data using axios
 export const deleteApiData = (url, taskId) => {
   axios({
-    url: url + taskId + ".json",
+    url: apiUrl + "/" + url + "/" + taskId,
     method: "DELETE",
   });
 };

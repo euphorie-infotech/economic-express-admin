@@ -1,5 +1,9 @@
 import React from "react";
-import { getApiData, putApiData } from "../../../Services/apiFunctions";
+import {
+  deleteApiData,
+  getApiData,
+  putApiData,
+} from "../../../Services/apiFunctions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,22 +14,10 @@ import {
 
 const NewsCategoryList = () => {
   const queryClient = useQueryClient();
+
+  // fetching news category data from server
   const getCategoryList = () => {
     return getApiData("newsCategory");
-  };
-
-  const updateCategory = (data) => {
-    return putApiData("newsCategory", data.id, data);
-  };
-
-  const { mutate } = useMutation(updateCategory, {
-    onSuccess: () => queryClient.invalidateQueries(["news-category"]),
-  });
-
-  const updateStatus = (category) => {
-    const status = category.status === "active" ? "inactive" : "active";
-    const updatedData = { ...category, status };
-    mutate(updatedData);
   };
 
   const { isLoading, isError, error, data } = useQuery(
@@ -39,6 +31,29 @@ const NewsCategoryList = () => {
   if (isError) {
     return error.message;
   }
+
+  // updating the active/inactive status
+  const updateCategory = (data) => {
+    return putApiData("newsCategory", data.id, data);
+  };
+
+  const { mutate: updateMutate } = useMutation(updateCategory, {
+    onSuccess: () => queryClient.invalidateQueries(["news-category"]),
+  });
+
+  const updateStatus = (category) => {
+    const status = category.status === "active" ? "inactive" : "active";
+    const updatedData = { ...category, status };
+    updateMutate(updatedData);
+  };
+
+  // deleting an entry from the server
+  const deleteCategory = (categoryId) => {
+    return deleteApiData("newsCategory", categoryId);
+  };
+  const { mutate: deleteMutate } = useMutation(deleteCategory, {
+    onSuccess: () => queryClient.invalidateQueries(["news-category"]),
+  });
 
   return (
     <div className="px-10 py-5">
@@ -139,7 +154,11 @@ const NewsCategoryList = () => {
                   />
                 </button>
                 <button className="mx-2">
-                  <FontAwesomeIcon icon={faTrashCan} className="text-red-600" />
+                  <FontAwesomeIcon
+                    icon={faTrashCan}
+                    className="text-red-600"
+                    onClick={() => deleteMutate(category.id)}
+                  />
                 </button>
               </td>
             </tr>
