@@ -1,3 +1,70 @@
 {
-  "newsCategory": []
+  "newsCategory": [
+    {
+      "name": "business",
+      "slug": "business",
+      "metaTitle": "business",
+      "metaDescription": "business",
+      "status": "active",
+      "lang": "bn",
+      "metaKeywords": [
+        "business",
+        "sports",
+        "entertainment"
+      ],
+      "id": 2
+    },
+    {
+      "name": "demo",
+      "slug": "abc",
+      "metaTitle": "Sports in BD",
+      "metaDescription": "lorem ipsum dolor sit amet",
+      "status": "inactive",
+      "lang": "bn",
+      "metaKeywords": [
+        "abc",
+        "abc",
+        "xyz",
+        "pqr",
+        "mno",
+        "efg",
+        "wxy"
+      ],
+      "id": 3
+    },
+    {
+      "name": "demo",
+      "slug": "abc",
+      "metaTitle": "abc",
+      "metaDescription": "abc",
+      "status": "active",
+      "lang": "bn",
+      "metaKeywords": [
+        "abc"
+      ],
+      "id": 4
+    }
+  ],
+  "users": [
+    {
+      "name": "MD TANVIR ANJUM",
+      "email": "tanvir@test.com",
+      "phone": "+8801754760174",
+      "password": "MYNQR3y_RQQ",
+      "confirmPassword": "MYNQR3y_RQQ",
+      "role": "admin",
+      "image": {},
+      "id": 1
+    },
+    {
+      "name": "MD TANVIR ANJUM",
+      "email": "tanvir@test.com",
+      "phone": "+8801754760174",
+      "password": "MYNQR3y_RQQ",
+      "confirmPassword": "MYNQR3y_RQQ",
+      "role": "admin",
+      "image": "bg.png",
+      "id": 2
+    }
+  ]
 }

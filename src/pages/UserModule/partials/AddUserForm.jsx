@@ -1,23 +1,28 @@
 import React from "react";
 
-import { faFontAwesome } from "@fortawesome/free-solid-svg-icons";
-import { useForm } from "react-hook-form";
+import {
+  faEnvelope,
+  faEye,
+  faPhone,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { Controller, useForm } from "react-hook-form";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DevTool } from "@hookform/devtools";
 import { postApiData } from "../../../Services/apiFunctions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const NewsCategoryForm = ({ visibility, onFormSubmit }) => {
+const AddUserForm = () => {
   const queryClient = useQueryClient();
   const form = useForm();
   const postNewsCategory = (data) => {
-    return postApiData("newsCategory", data);
+    return postApiData("users", data);
   };
 
   const { mutate } = useMutation(postNewsCategory, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["news-category"]);
+      queryClient.invalidateQueries(["users"]);
     },
   });
 
@@ -25,24 +30,17 @@ const NewsCategoryForm = ({ visibility, onFormSubmit }) => {
   const { errors } = formState;
   const onSubmit = (data) => {
     console.log(data);
-    const { metaKeywords, ...categoryData } = data;
-    const keywords = metaKeywords.split("#");
-    const finalData = { ...categoryData, metaKeywords: keywords };
 
-    mutate(finalData);
+    mutate(data);
     reset();
-    onFormSubmit("false");
+    // onFormSubmit("false");
   };
 
   return (
     <div
-      className={`w-full py-5 px-10 flex flex-col justify-center border-b border-slate-500 ${
-        visibility === "false" ? "hidden" : "visible"
-      } transition duration-300 ease-in-out`}
+      className={`w-full py-5 px-10 flex flex-col justify-center border-b border-slate-500  transition duration-300 ease-in-out`}
     >
-      <h1 className="text-3xl font-serif font-light">
-        Create new News Category
-      </h1>
+      <h1 className="text-3xl font-serif font-light">Create new User</h1>
       <form
         action="submit"
         className="my-5 flex flex-wrap"
@@ -52,17 +50,17 @@ const NewsCategoryForm = ({ visibility, onFormSubmit }) => {
         <div className="basis-1/3 w-3/4 my-4">
           <div className="flex w-full px-2">
             <div className="basis-1/6 border border-slate-600 text-center p-2 rounded-l-lg bg-slate-300">
-              <FontAwesomeIcon icon={faFontAwesome} />
+              <FontAwesomeIcon icon={faUser} />
             </div>
             <div className="basis-5/6 border border-slate-600 rounded-r-lg overflow-clip w-full px-5">
               <input
                 type="text"
                 name="name"
-                placeholder="Category Name"
+                placeholder="Name"
                 id="name"
                 className="w-full h-full placeholder:font-light focus-within:outline-none focus-visible:outline-none"
                 {...register("name", {
-                  required: "Category name is required",
+                  required: "Name is required",
                 })}
               />
             </div>
@@ -78,69 +76,69 @@ const NewsCategoryForm = ({ visibility, onFormSubmit }) => {
         <div className="basis-1/3 w-3/4 my-4">
           <div className="flex w-full px-2">
             <div className="basis-1/6 border border-slate-600 text-center p-2 rounded-l-lg bg-slate-300">
-              <FontAwesomeIcon icon={faFontAwesome} />
+              <FontAwesomeIcon icon={faEnvelope} />
             </div>
             <div className="basis-5/6 border border-slate-600 rounded-r-lg overflow-clip w-full px-5">
               <input
-                type="text"
-                name="slug"
-                placeholder="Category Slug"
-                id="slug"
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                id="email"
                 className="w-full h-full placeholder:font-light focus-within:outline-none focus-visible:outline-none"
-                {...register("slug", {
-                  required: "Category slug is required",
+                {...register("email", {
+                  required: "Email Address is required",
                 })}
               />
             </div>
           </div>
           <p
             className={`${
-              errors.name ? "visible" : "hidden"
+              errors.email ? "visible" : "hidden"
             } text-xs text-red-600 pl-2 mt-2`}
           >
-            {`** ${errors.slug?.message}`}
+            {`** ${errors.email?.message}`}
           </p>
         </div>
         <div className="basis-1/3 w-3/4 my-4">
           <div className="flex w-full px-2">
             <div className="basis-1/6 border border-slate-600 text-center p-2 rounded-l-lg bg-slate-300">
-              <FontAwesomeIcon icon={faFontAwesome} />
+              <FontAwesomeIcon icon={faPhone} />
             </div>
             <div className="basis-5/6 border border-slate-600 rounded-r-lg overflow-clip w-full px-5">
               <input
-                type="text"
-                name="metaTitle"
-                placeholder="Meta Title"
-                id="metaTitle"
+                type="tel"
+                name="phone"
+                placeholder="Phone Number"
+                id="phone"
                 className="w-full h-full placeholder:font-light focus-within:outline-none focus-visible:outline-none"
-                {...register("metaTitle", {
-                  required: "Meta title is required",
+                {...register("phone", {
+                  required: "Phone number is required",
                 })}
               />
             </div>
           </div>
           <p
             className={`${
-              errors.name ? "visible" : "hidden"
+              errors.phone ? "visible" : "hidden"
             } text-xs text-red-600 pl-2 mt-2`}
           >
-            {`** ${errors.metaTitle?.message}`}
+            {`** ${errors.phone?.message}`}
           </p>
         </div>
         <div className="basis-1/3 w-3/4 my-4">
           <div className="flex w-full px-2">
             <div className="basis-1/6 border border-slate-600 text-center p-2 rounded-l-lg bg-slate-300">
-              <FontAwesomeIcon icon={faFontAwesome} />
+              <FontAwesomeIcon icon={faEye} />
             </div>
             <div className="basis-5/6 border border-slate-600 rounded-r-lg overflow-clip w-full px-5">
               <input
                 type="text"
-                name="metaDescription"
-                placeholder="Meta Description"
-                id="metaDescription"
+                name="password"
+                placeholder="Password"
+                id="password"
                 className="w-full h-full placeholder:font-light focus-within:outline-none focus-visible:outline-none"
-                {...register("metaDescription", {
-                  required: "Meta description is required",
+                {...register("password", {
+                  required: "Password is required",
                 })}
               />
             </div>
@@ -150,82 +148,85 @@ const NewsCategoryForm = ({ visibility, onFormSubmit }) => {
               errors.name ? "visible" : "hidden"
             } text-xs text-red-600 pl-2 mt-2`}
           >
-            {`** ${errors.metaDescription?.message}`}
+            {`** ${errors.password?.message}`}
           </p>
         </div>
         <div className="basis-1/3 w-3/4 my-4">
           <div className="flex w-full px-2">
             <div className="basis-1/6 border border-slate-600 text-center p-2 rounded-l-lg bg-slate-300">
-              <FontAwesomeIcon icon={faFontAwesome} />
+              <FontAwesomeIcon icon={faEye} />
             </div>
             <div className="basis-5/6 border border-slate-600 rounded-r-lg overflow-clip w-full px-5">
               <input
                 type="text"
-                name="metaKeywords"
-                placeholder="Meta Keywords"
-                id="metaKeywords"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                id="confirmPassword"
                 className="w-full h-full placeholder:font-light focus-within:outline-none focus-visible:outline-none"
-                {...register("metaKeywords", {
-                  required: "Meta keyword is required",
+                {...register("confirmPassword", {
+                  required: "Please retype password",
                 })}
               />
             </div>
           </div>
           <p
             className={`${
-              errors.name ? "visible" : "hidden"
+              errors.confirmPassword ? "visible" : "hidden"
             } text-xs text-red-600 pl-2 mt-2`}
           >
-            {`** ${errors.metaKeywords?.message}`}
+            {`** ${errors.confirmPassword?.message}`}
           </p>
         </div>
         <div className="basis-1/3 px-2 flex items-center">
-          <input
-            type="radio"
-            name="status"
-            id="active"
-            checked
-            value="active"
-            {...register("status")}
-          />
-          <label htmlFor="active" className="ml-3 mr-10">
-            Active
+          <label htmlFor="" className="mr-7">
+            Select Role:
           </label>
           <input
             type="radio"
-            name="status"
-            id="inactive"
-            value="inactive"
-            {...register("status")}
+            name="role"
+            id="admin"
+            checked
+            value="admin"
+            {...register("role")}
           />
-          <label htmlFor="active" className="ml-3 mr-10">
-            Inactive
+          <label htmlFor="admin" className="ml-3 mr-5">
+            Admin
+          </label>
+          <input
+            type="radio"
+            name="role"
+            id="publisher"
+            value="publisher"
+            {...register("role")}
+          />
+          <label htmlFor="publisher" className="ml-3 mr-5">
+            Publisher
           </label>
         </div>
-        <div className="w-full flex justify-between items-center">
-          <div className="basis-1/3 px-2 flex items-center">
-            <input
-              type="radio"
-              name="lang"
-              checked
-              id="bn"
-              value="bn"
-              {...register("lang")}
-            />
-            <label htmlFor="lang" className="ml-3 mr-10">
-              বাংলা
-            </label>
-            <input
-              type="radio"
-              name="lang"
-              id="en"
-              value="en"
-              {...register("lang")}
-            />
-            <label htmlFor="lang" className="ml-3 mr-10">
-              English
-            </label>
+        <div className="basis-1/2 w-3/4 my-4">
+          <div className="flex w-full px-2">
+            <div className="w-full px-2 flex items-center">
+              <label htmlFor="image" className="mr-7">
+                Select Image
+              </label>
+              <Controller
+                control={control}
+                name={"image"}
+                render={({ field: { value, onChange, ...field } }) => {
+                  return (
+                    <input
+                      type="file"
+                      value={value?.fileName}
+                      onChange={(e) => onChange(e.target.files[0])}
+                      id="image"
+                    />
+                  );
+                }}
+              />
+            </div>
           </div>
+        </div>
+        <div className="w-full flex justify-between items-center">
           <button
             type="submit"
             className="border border-slate-500 rounded-lg py-2 px-20 hover:px-28 hover:bg-slate-300 transition-all duration-300 mx-2 my-4"
@@ -239,4 +240,4 @@ const NewsCategoryForm = ({ visibility, onFormSubmit }) => {
   );
 };
 
-export default NewsCategoryForm;
+export default AddUserForm;

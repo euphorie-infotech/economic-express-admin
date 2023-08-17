@@ -15,6 +15,23 @@ import {
 const NewsCategoryList = () => {
   const queryClient = useQueryClient();
 
+  // deleting an entry from the server
+  const deleteCategory = (categoryId) => {
+    return deleteApiData("newsCategory", categoryId);
+  };
+  const { mutate: deleteMutate } = useMutation(deleteCategory, {
+    onSuccess: () => queryClient.invalidateQueries(["news-category"]),
+  });
+
+  // updating the active/inactive status
+  const updateCategory = (data) => {
+    return putApiData("newsCategory", data.id, data);
+  };
+
+  const { mutate: updateMutate } = useMutation(updateCategory, {
+    onSuccess: () => queryClient.invalidateQueries(["news-category"]),
+  });
+
   // fetching news category data from server
   const getCategoryList = () => {
     return getApiData("newsCategory");
@@ -32,28 +49,13 @@ const NewsCategoryList = () => {
     return error.message;
   }
 
-  // updating the active/inactive status
-  const updateCategory = (data) => {
-    return putApiData("newsCategory", data.id, data);
-  };
-
-  const { mutate: updateMutate } = useMutation(updateCategory, {
-    onSuccess: () => queryClient.invalidateQueries(["news-category"]),
-  });
-
   const updateStatus = (category) => {
     const status = category.status === "active" ? "inactive" : "active";
     const updatedData = { ...category, status };
     updateMutate(updatedData);
   };
 
-  // deleting an entry from the server
-  const deleteCategory = (categoryId) => {
-    return deleteApiData("newsCategory", categoryId);
-  };
-  const { mutate: deleteMutate } = useMutation(deleteCategory, {
-    onSuccess: () => queryClient.invalidateQueries(["news-category"]),
-  });
+  console.log(data[0].metaKeywords);
 
   return (
     <div className="px-10 py-5">
@@ -125,7 +127,13 @@ const NewsCategoryList = () => {
                   category.status === "inactive" ? "bg-red-400" : "bg-stone-200"
                 } py-3 border border-white border-collapse`}
               >
-                {category.metaKeywords}
+                <ul className="flex justify-center">
+                  {category.metaKeywords.map((keyword) => (
+                    <li className="px-[2px] rounded-md m-1 border border-slate-300">
+                      {keyword}
+                    </li>
+                  ))}
+                </ul>
               </td>
               <td
                 className={`${
