@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   faEnvelope,
   faEye,
+  faEyeSlash,
   faPhone,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -12,12 +13,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DevTool } from "@hookform/devtools";
 import { postApiData } from "../../../Services/apiFunctions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useStateValue } from "../../../states/StateProvider";
 
 const AddUserForm = () => {
+  const [{ authToken }] = useStateValue();
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const queryClient = useQueryClient();
   const form = useForm();
   const postNewsCategory = (data) => {
-    return postApiData("users", data);
+    return postApiData("admin/registration", data, authToken);
   };
 
   const { mutate } = useMutation(postNewsCategory, {
@@ -34,6 +38,11 @@ const AddUserForm = () => {
     mutate(data);
     reset();
     // onFormSubmit("false");
+  };
+
+  // password visibility
+  const passwordVisibilityHandler = () => {
+    setIsPasswordVisible((prevState) => !prevState);
   };
 
   return (
@@ -128,11 +137,14 @@ const AddUserForm = () => {
         <div className="basis-1/3 w-3/4 my-4">
           <div className="flex w-full px-2">
             <div className="basis-1/6 border border-slate-600 text-center p-2 rounded-l-lg bg-slate-300">
-              <FontAwesomeIcon icon={faEye} />
+              <FontAwesomeIcon
+                icon={!isPasswordVisible ? faEye : faEyeSlash}
+                onClick={() => passwordVisibilityHandler()}
+              />
             </div>
             <div className="basis-5/6 border border-slate-600 rounded-r-lg overflow-clip w-full px-5">
               <input
-                type="text"
+                type={isPasswordVisible ? "text" : "password"}
                 name="password"
                 placeholder="Password"
                 id="password"
@@ -154,11 +166,14 @@ const AddUserForm = () => {
         <div className="basis-1/3 w-3/4 my-4">
           <div className="flex w-full px-2">
             <div className="basis-1/6 border border-slate-600 text-center p-2 rounded-l-lg bg-slate-300">
-              <FontAwesomeIcon icon={faEye} />
+              <FontAwesomeIcon
+                icon={!isPasswordVisible ? faEye : faEyeSlash}
+                onClick={() => passwordVisibilityHandler()}
+              />
             </div>
             <div className="basis-5/6 border border-slate-600 rounded-r-lg overflow-clip w-full px-5">
               <input
-                type="text"
+                type={isPasswordVisible ? "text" : "password"}
                 name="confirmPassword"
                 placeholder="Confirm Password"
                 id="confirmPassword"
@@ -203,7 +218,33 @@ const AddUserForm = () => {
             Publisher
           </label>
         </div>
-        <div className="basis-1/2 w-3/4 my-4">
+        <div className="basis-1/3 px-2 flex items-center">
+          <label htmlFor="" className="mr-7">
+            Status:
+          </label>
+          <input
+            type="radio"
+            name="status"
+            id="active"
+            checked
+            value="active"
+            {...register("status")}
+          />
+          <label htmlFor="active" className="ml-3 mr-10">
+            Active
+          </label>
+          <input
+            type="radio"
+            name="status"
+            id="inactive"
+            value="inactive"
+            {...register("status")}
+          />
+          <label htmlFor="active" className="ml-3 mr-10">
+            Inactive
+          </label>
+        </div>
+        {/* <div className="basis-1/2 w-3/4 my-4">
           <div className="flex w-full px-2">
             <div className="w-full px-2 flex items-center">
               <label htmlFor="image" className="mr-7">
@@ -225,7 +266,7 @@ const AddUserForm = () => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="w-full flex justify-between items-center">
           <button
             type="submit"

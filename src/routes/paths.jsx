@@ -1,5 +1,7 @@
 import NewsCategory from "../pages/NewsCategory/NewsCategory";
 import UserModule from "../pages/UserModule/UserModule";
+import Tags from "../pages/Tags/Tags";
+import Login from "../components/Login";
 
 export const routes = [
   {
@@ -13,5 +15,11 @@ export const routes = [
     name: "User Module",
     path: "/user-module",
     element: <UserModule />,
+  },
+  {
+    id: 3,
+    name: "Tags",
+    path: "/tags",
+    element: <Tags />,
   },
 ];

@@ -9,12 +9,12 @@ import { postApiData } from "../../../Services/apiFunctions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useStateValue } from "../../../states/StateProvider";
 
-const NewsCategoryForm = ({ visibility, onFormSubmit }) => {
+const TagForm = ({ visibility, onFormSubmit }) => {
   const [{ authToken }] = useStateValue();
   const queryClient = useQueryClient();
   const form = useForm();
   const postNewsCategory = (data) => {
-    return postApiData("admin/category", data, authToken);
+    return postApiData("admin/tag", data, authToken);
   };
 
   const { mutate } = useMutation(postNewsCategory, {
@@ -26,7 +26,6 @@ const NewsCategoryForm = ({ visibility, onFormSubmit }) => {
   const { register, control, handleSubmit, reset, formState } = form;
   const { errors } = formState;
   const onSubmit = (data) => {
-    console.log(data);
     const { metaKeywords, ...categoryData } = data;
     const keywords = metaKeywords.split("#");
     const finalData = { ...categoryData, metaKeywords: keywords };
@@ -42,9 +41,7 @@ const NewsCategoryForm = ({ visibility, onFormSubmit }) => {
         visibility === "false" ? "hidden" : "visible"
       } transition duration-300 ease-in-out`}
     >
-      <h1 className="text-3xl font-serif font-light">
-        Create new News Category
-      </h1>
+      <h1 className="text-3xl font-serif font-light">Create new News Tag</h1>
       <form
         action="submit"
         className="my-5 flex flex-wrap"
@@ -60,11 +57,11 @@ const NewsCategoryForm = ({ visibility, onFormSubmit }) => {
               <input
                 type="text"
                 name="name"
-                placeholder="Category Name"
+                placeholder="Tag Name"
                 id="name"
                 className="w-full h-full placeholder:font-light focus-within:outline-none focus-visible:outline-none"
                 {...register("name", {
-                  required: "Category name is required",
+                  required: "Tag name is required",
                 })}
               />
             </div>
@@ -241,4 +238,4 @@ const NewsCategoryForm = ({ visibility, onFormSubmit }) => {
   );
 };
 
-export default NewsCategoryForm;
+export default TagForm;

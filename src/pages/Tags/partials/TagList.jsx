@@ -13,34 +13,34 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { useStateValue } from "../../../states/StateProvider";
 
-const NewsCategoryList = () => {
+const TagList = () => {
   const [{ authToken }] = useStateValue();
   const queryClient = useQueryClient();
 
   // deleting an entry from the server
-  const deleteCategory = (categoryId) => {
-    return deleteApiData("admin/category", categoryId, authToken);
+  const deleteCategory = (tagId) => {
+    return deleteApiData("admin/tag", tagId, authToken);
   };
   const { mutate: deleteMutate } = useMutation(deleteCategory, {
-    onSuccess: () => queryClient.invalidateQueries(["news-category"]),
+    onSuccess: () => queryClient.invalidateQueries(["tag-category"]),
   });
 
   // updating the active/inactive status
   const updateCategory = (data) => {
-    return putApiData("admin/category", data.id, data, authToken);
+    return putApiData("admin/tag", data.id, data, authToken);
   };
 
   const { mutate: updateMutate } = useMutation(updateCategory, {
-    onSuccess: () => queryClient.invalidateQueries(["news-category"]),
+    onSuccess: () => queryClient.invalidateQueries(["tag-category"]),
   });
 
   // fetching news category data from server
   const getCategoryList = () => {
-    return getApiData("admin/category", authToken);
+    return getApiData("admin/tag", authToken);
   };
 
   const { isLoading, isError, error, data } = useQuery(
-    ["news-category"],
+    ["tag-category"],
     getCategoryList
   );
 
@@ -51,15 +51,15 @@ const NewsCategoryList = () => {
     return error.message;
   }
 
-  const updateStatus = (category) => {
-    const status = category.status === "active" ? "inactive" : "active";
-    const updatedData = { ...category, status };
+  const updateStatus = (tag) => {
+    const status = tag.status === "active" ? "inactive" : "active";
+    const updatedData = { ...tag, status };
     updateMutate(updatedData);
   };
 
-  const categoryList = data.data;
+  const tagList = data.data;
 
-  if (categoryList.length === 0) {
+  if (tagList.length === 0) {
     return;
   }
 
@@ -88,44 +88,44 @@ const NewsCategoryList = () => {
             </th>
             <th className="py-3 bg-stone-200 border border-white border-collapse"></th>
           </tr>
-          {categoryList?.map((category, index) => (
-            <tr key={`category-${index}`}>
+          {tagList?.map((tag, index) => (
+            <tr key={`tag-${index}`}>
               <td
                 className={`${
-                  category.status === "inactive" ? "bg-red-400" : "bg-stone-200"
+                  tag.status === "inactive" ? "bg-red-400" : "bg-stone-200"
                 } py-3 border border-white border-collapse`}
               >
                 {index + 1}
               </td>
               <td
                 className={`${
-                  category.status === "inactive" ? "bg-red-400" : "bg-stone-200"
+                  tag.status === "inactive" ? "bg-red-400" : "bg-stone-200"
                 } py-3 border border-white border-collapse`}
               >
-                {category.name}
+                {tag.name}
               </td>
 
               <td
                 className={`${
-                  category.status === "inactive" ? "bg-red-400" : "bg-stone-200"
+                  tag.status === "inactive" ? "bg-red-400" : "bg-stone-200"
                 } py-3 border border-white border-collapse`}
               >
-                {category.metaTitle}
+                {tag.metaTitle}
               </td>
               <td
                 className={`${
-                  category.status === "inactive" ? "bg-red-400" : "bg-stone-200"
+                  tag.status === "inactive" ? "bg-red-400" : "bg-stone-200"
                 } py-3 border border-white border-collapse`}
               >
-                {category.metaDescription}
+                {tag.metaDescription}
               </td>
               <td
                 className={`${
-                  category.status === "inactive" ? "bg-red-400" : "bg-stone-200"
+                  tag.status === "inactive" ? "bg-red-400" : "bg-stone-200"
                 } py-3 border border-white border-collapse`}
               >
                 <ul className="flex justify-center">
-                  {category.metaKeywords.map((keyword, index) => (
+                  {tag.metaKeywords.map((keyword, index) => (
                     <li
                       className="px-[2px] rounded-md m-1 border border-slate-300"
                       key={`slug-${index}`}
@@ -137,25 +137,23 @@ const NewsCategoryList = () => {
               </td>
               <td
                 className={`${
-                  category.status === "inactive" ? "bg-red-400" : "bg-stone-200"
+                  tag.status === "inactive" ? "bg-red-400" : "bg-stone-200"
                 } py-3 border border-white border-collapse`}
               >
-                {category.status}
+                {tag.status}
               </td>
               <td
                 className={`${
-                  category.status === "inactive" ? "bg-red-400" : "bg-stone-200"
+                  tag.status === "inactive" ? "bg-red-400" : "bg-stone-200"
                 } py-3 border border-white border-collapse`}
               >
-                <button className="mx-2" onClick={() => updateStatus(category)}>
+                <button className="mx-2" onClick={() => updateStatus(tag)}>
                   <FontAwesomeIcon
                     icon={
-                      category.status === "active"
-                        ? faCircleXmark
-                        : faCircleCheck
+                      tag.status === "active" ? faCircleXmark : faCircleCheck
                     }
                     className={`${
-                      category.status === "active"
+                      tag.status === "active"
                         ? "text-orange-400"
                         : "text-green-600"
                     }`}
@@ -165,7 +163,7 @@ const NewsCategoryList = () => {
                   <FontAwesomeIcon
                     icon={faTrashCan}
                     className="text-red-600"
-                    onClick={() => deleteMutate(category.id)}
+                    onClick={() => deleteMutate(tag.id)}
                   />
                 </button>
               </td>
@@ -177,4 +175,4 @@ const NewsCategoryList = () => {
   );
 };
 
-export default NewsCategoryList;
+export default TagList;
